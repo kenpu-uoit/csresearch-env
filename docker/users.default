@@ -1,0 +1,8 @@
+# WARNING
+# Leakage of this file is a security risk.
+# <user-id> is a number, usually starting at 1000
+# <user-name> is the user name of the account
+# <password> is the plaintext password.
+
+# <user-id> <user-name> <passworld>
+
