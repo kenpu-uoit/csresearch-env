@@ -171,11 +171,24 @@ RUN conda install -c pytorch/label/nightly -c nvidia faiss-gpu=1.7.4
 #
 RUN pip install soundfile==0.12.1
 
+# VSCode Jupyter support
+RUN pip install ipykernel ipywidgets
+
+# Postgres
+RUN pip install psycopg2-binary==2.9.9
+
+# LLM
+RUN pip install \
+    ollama==0.2.1 \
+    openai==1.35.13 \
+    llama-index==0.10.55 \
+    langchain==0.2.7
+
 #
 # Post installation configuration
 #
 WORKDIR /
 COPY ./start.sh ./createuser.sh ./createusers /bin/
 COPY ./users.default /etc
-
+COPY ./bash.bashrc /etc/bash.bashrc
 CMD /bin/start.sh
