@@ -5,7 +5,7 @@ import re
 import os
 import glob
 
-for user_list_file in glob.glob('/etc/users.*'):
+for user_list_file in glob.glob('/etc/users*'):
   with open(user_list_file, 'r') as f:
     for line in f:
         line = line.strip()
@@ -15,11 +15,27 @@ for user_list_file in glob.glob('/etc/users.*'):
         try:
             (uid, user, pw) = re.split(r'\s+', line, 2)
             home = '/home/%s' % user
+            ssh = '/home/%s/.ssh' % user
+        except:
+            continue
+
+        try:
+            print("| CREATE USER: uid=%s user=%s" % (uid, user), flush=True)
             subprocess.run(["createuser.sh", uid, user, pw])
-            if os.path.exists(home):
-                subprocess.run([
-                    "chown", "-R", "%s:%s" % (user, user), home
-                ])
         except Exception as e:
-            print("Error:", e)
-            break
+            print("|    Error", e, flush=True)
+
+        try:
+            if os.path.exists(home):
+                print("| CHOWN {}".format(home), flush=True)
+                subprocess.run([ "chown", "-R", "%s:100" % (uid), home])
+
+            if os.path.exists(ssh):
+                print("| CHMOD {}".format(ssh), flush=True)
+                subprocess.run(["chmod", "700", ssh])
+
+            if os.path.exists(os.path.join(ssh, "authorized_keys")):
+                print("| CHMOD {}".format(ssh + "/authorized_keys"), flush=True)
+                subprocess.run(["chmod", "600", os.path.join(ssh, "authorized_keys")])
+        except Exception as e:
+            print("|    Error:", e)

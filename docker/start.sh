@@ -10,4 +10,10 @@ echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #
 /bin/createusers
 service ssh start
+
+if [[ -f /etc/setup.sh ]]
+then
+	/bin/bash setup.sh
+fi
+
 sleep infinity
