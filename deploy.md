@@ -18,7 +18,7 @@ The base image only exports the SSH port at 22.  Therefore, the runtime deployme
 ## Resource limitation
 
 - CPU, memory quota should be specified.
-- GPUs should be specified.
+- GPUs should be specified using the `device_ids` as an array of strings.
 
 ## Sample `docker-compose.yaml`
 
@@ -41,10 +41,8 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 2
+              device_ids: ["0", "1"]
               capabilities: [gpu]
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=0,2
 ```
 
 ## Maintenance

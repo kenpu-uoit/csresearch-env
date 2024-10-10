@@ -17,7 +17,5 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: <an integer which is the number of gpus>
+              device_ids: [<for example "0", "1">]
               capabilities: [gpu]
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=<comma separated GPU ids>
