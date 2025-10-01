@@ -1,0 +1,32 @@
+services:
+  {%- if postgres %}
+  db:
+    image: postgres:14
+    volumes:
+    - {{ data_path }}/{{ project }}/{{ hostname }}/postgres/:/var/lib/postgresql/data
+    environment:
+    - PGDATA=/var/lib/postgresql/data
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=postgres
+  {% endif %}
+  research:
+    image: {{ image | default("csr/base") }}
+    hostname: {{ hostname }}
+    ports:
+      - "{{ port }}:22"
+    volumes:
+      - {{ data_path }}/{{project}}/{{hostname}}/home:/home
+      - ./users:/etc/users
+    runtime: nvidia
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ cpus }}"
+          memory: "{{ memory }}"
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0", "1", "2", "3"]
+              capabilities: [gpu]
+  

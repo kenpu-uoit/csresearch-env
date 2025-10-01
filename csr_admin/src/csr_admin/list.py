@@ -1,7 +1,7 @@
 import docker
 from tabulate import tabulate
 
-def main():
+def command():
     client = docker.from_env()
     containers = client.containers.list()
     table_data = []
@@ -103,8 +103,4 @@ def main():
             ports_info_str = "None"
 
         table_data.append([container_name, container_id, gpu_info, cpu_info, mem_info, ports_info_str])
-
     print(tabulate(table_data, headers=headers, tablefmt="grid"))
-
-if __name__ == '__main__':
-    main()

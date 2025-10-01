@@ -1,6 +1,6 @@
 # Deployment
 
-<p style='text-align:right'>Ken Pu, 2024-10-09</p>
+<p style='text-align:right'>Ken Pu, 2025-09-30</p>
 
 ## Runtime
 
@@ -20,48 +20,28 @@ The base image only exports the SSH port at 22.  Therefore, the runtime deployme
 - CPU, memory quota should be specified.
 - GPUs should be specified using the `device_ids` as an array of strings.
 
-## Sample `docker-compose.yaml`
+# CSR admin
 
-```yaml
-services:
-  research-env-1:
-    image: csr/base
-    hostname: research-env-1
-    ports:
-      - "8022:22"
-    volumes:
-      - ./data/home:/home
-      - ./data/users:/etc/users
-    runtime: nvidia
-    deploy:
-      resources:
-        limits:
-          cpus: 8
-          memory: 32G
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ["0", "1"]
-              capabilities: [gpu]
-```
-
-## Maintenance
-
-### Start
-
-```sh
-docker compose up -d
-```
-
-### Restart
+## Installation
 
 ```
-docker compose down
-docker compose up -d
+cd csr_admin
+make install
 ```
 
-### Dynamically adding new user
+## Tools
 
-- Update `./data/users` with the new user.  (Old users cannot be deleted.)
-- Login to the container (either through ssh or `docker exec`)
-- run `/bin/createusers`
+```
+csr list
+```
+
+```
+$ csr create <proj>/<host> --image csr/base --ssh 8040 --cpus 16 --ram 8G --data /data --postgres
+$ cd /data/<proj>/<host>
+```
+
+Edit `users`
+
+```
+$ make ...
+```

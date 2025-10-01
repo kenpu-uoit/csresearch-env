@@ -1,0 +1,31 @@
+services:
+  research:
+    image: csr/base
+    hostname: c4050
+    ports:
+      - "8024:22"
+    volumes:
+      - /data/kenpu/c4050/home:/home
+      - /data/kenpu/c4050/data:/data
+      - /data/kenpu/c4050/users:/etc/users
+    runtime: nvidia
+    deploy:
+      resources:
+        limits:
+          cpus: "16"
+          memory: 32G
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["2"]
+              capabilities: [gpu]
+  db:
+    image: postgres:14
+    volumes:
+      - /data/kenpu/c4050/postgres:/var/lib/postgresql/data
+    environment:
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+
